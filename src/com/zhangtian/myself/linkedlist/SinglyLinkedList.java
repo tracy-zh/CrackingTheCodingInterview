@@ -8,186 +8,169 @@ public class SinglyLinkedList {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		LinkedList l = new LinkedList();
-		l.createInLast(900);
-		l.createInLast(400);
-		l.createInLast(714);
-		
-		l.remove(3);
+		l.appendToTail(900);
+		l.appendToTail(400);
+		l.appendToTail(714);
+		l.appendToHead(900);
+		l.appendToHead(400);
+		l.appendToHead(714);
+		System.out.println(l.isEmpty());
+		//l.remove(3);
 		l.display();
+		l.insertAfterKey(0, 0);
+		l.display();
+		l.insertAfterKey(5, 0);
+		l.display();
+		l.remove(4);
+		l.display();
+		System.out.println(l.indexOf(900));
+		System.out.println(l.get(3));
+
+
+		l.clear();
+
 	}
 
 }
-class Node{
-	int data;
+class Node {
 	Node next;
+	int data;
 	
-	Node(int data) {
+	public Node(int data) {
 		this.data = data;
+		this.next = null;
 	}
 	
-	public int getData() {
-		return data;
+	public Node() {
+		this.data = -1;
+		this.next = null;
 	}
-	
-	public Node getNext() {
-		return next;
-	}
-	
-
 }
 
 class LinkedList {
-	public Node head;
+	Node head;
 	
 	LinkedList() {
-		head = null;
-	}
-	
-	public boolean isEmpty() {
-		return(head == null);
+		head = new Node();
 	}
 	
 	public void clear() {
-		head = null;
+		head.next = null;
 	}
 	
-	public int length() {	
-		Node currentNode = head;
-		int length = 1;
-		if(isEmpty()) {
-			return 0;
-		} else {
-			while(currentNode.next != null) {
-				currentNode = currentNode.next;
-				length ++;
-			}
-			return length;
+	public boolean isEmpty() {
+		return head.next == null;
+	}
+	
+	public int length() {
+		Node currentNode = head.next; //currentNode is the first node
+		int length = 0;
+		while(currentNode != null) {
+			currentNode = currentNode.next;
+			length++;
 		}
+		return length;
 	}
 	
-	public Node createInHead(int data) {
+	public void display() {
+		Node currentNode = head.next; //first node
+		while(currentNode != null) {
+			System.out.print(currentNode.data + " ");
+			currentNode = currentNode.next;
+		}
+		System.out.println();
+	}
+	
+	public void appendToTail(int data) {
+		Node newNode = new Node(data);
+		Node currentNode = head;
+		
+		while(currentNode.next != null) {
+			currentNode = currentNode.next;
+		}
+		currentNode.next = newNode;
+	}
+	
+	public void appendToHead(int data) {
 		Node newNode = new Node(data);
 		
-		newNode.next = head;
-		head = newNode;
-		return head;
+		newNode.next = head.next;
+		head.next = newNode;
 	}
 	
-	public Node createInLast(int data){
+	public void insertAfterKey(int key, int data) {
 		Node newNode = new Node(data);
 		Node currentNode = head;
 		
-		if(isEmpty()) {
-			head = newNode;
-		} else {
-			while(currentNode.next != null) {
-				currentNode = currentNode.next;
-			}
-			currentNode.next = newNode;
-			newNode.next = null;
-		}
-		return head;
-	}
-	
-	public Node insertAfterKey(int n, int x) {
-		Node currentNode = head;
-		Node newNode = new Node(x);
-		
-		if(n >= length()){
+		if(key > length() - 1) {
 			System.out.println("out of range");
 		}
 		else {
-			for(int i = 0; i < n; i++) {
+			for(int i = 0; i < key; i++) {
 				currentNode = currentNode.next;
 			}
-			if(currentNode.next == null){
-				currentNode.next = newNode;
-			} else {
-				newNode.next = currentNode.next;
-				currentNode.next = newNode;			
-			}
+			newNode.next = currentNode.next;
+			currentNode.next = newNode;
 		}
-		return head;
 	}
 	
-	public void remove(int n) {
-		Node currentNode = head;
+	public void remove(int key) {
 		Node previousNode = head;
+		Node currentNode = head;
 		
-		if(n >= length()){
+		if(key > length() - 1) {
 			System.out.println("out of range");
-		} else {
-			for(int i = 0; i < n; i++) {
+		}
+		else {
+			for(int i = -1; i < key; i++) {
 				previousNode = currentNode;
 				currentNode = currentNode.next;
 			}
-			if(currentNode.next == null) {
-				previousNode.next = null;
-			} else if(currentNode == head){
-				head = currentNode.next;
-			} else {
-				previousNode.next = currentNode.next;
-			}
+			previousNode.next = currentNode.next;
 		}
-		//return currentNode.data;
 	}
 	
-	public Node indexOf(int i) {
+	public int indexOf(int data) {
+		Node currentNode = head;
+		int i = -1;
+		
+		while(currentNode.data != data) {
+			if(currentNode.next == null)
+				return -1;
+			else{
+				currentNode = currentNode.next;
+				i++;
+			}	
+		}
+		return i;
+		
+	}
+	
+	public Node get(int key) {
 		Node currentNode = head;
 		
-		while(currentNode.data != i) {
-			if(currentNode.next == null) {
-				return null;
-			} else {
-				currentNode = currentNode.next;				
+		if(key > length() - 1) {
+			System.out.println("out of range");
+		}
+		else {
+			for(int i = -1; i < key; i++) {
+				currentNode = currentNode.next;
 			}
 		}
 		return currentNode;
 	}
 	
-	public Object get(int n) {
+	public Node getLast() {
 		Node currentNode = head;
 		
-		if(isEmpty()) {
-			return null;
-		} else if(n >= length()){
-			return null;
+		while(currentNode.next != null) {
+			currentNode = currentNode.next;
 		}
-		else {
-			for(int i = 0; i < n; i++) {
-				currentNode = currentNode.next;
-			}
-			return currentNode.data;	
-		}
-
+		return currentNode;
 	}
 	
-	public void display() {
-		Node node = head;
-		if(!isEmpty()) {
-			while(node != null) {
-				System.out.println("Data: " + node.data);
-				System.out.println("Next Node: " + node.next);
-				node = node.next;
-			}
-		} else {
-			System.out.println("It's empty");
-		}		
-		System.out.println();
-	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

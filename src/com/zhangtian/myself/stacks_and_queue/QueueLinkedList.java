@@ -18,8 +18,8 @@ public class QueueLinkedList {
 		s.add("83");
 		s.display();
 		System.out.println();
-		s.remove();
-		s.remove();
+		s.poll();
+		s.poll();
 		s.display();
 		
 		System.out.println();
@@ -71,7 +71,7 @@ public class QueueLinkedList {
 			head = newNode;
 	}
 	
-	public void remove() {
+	public void poll() {
 		Node current = head;
 		Node previous = head;
 		if(!isEmpty()) {
